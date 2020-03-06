@@ -106,9 +106,10 @@
       </transition>
     </svg>
     <div
+      v-for="zone in zones"
       class='vignette-danger'
-      :class="{ 'affichee': zonePrevention }"
-      :style="imageFondPositionnee"
+      :class="[ { 'affichee': zonePrevention }, { 'agrandie': zoneEvaluee } ]"
+      :style="styleZone(zone)"
     />
   </div>
 </template>
@@ -156,13 +157,6 @@ export default {
     zoneActiveTransformOrigin () {
       return `${this.zoneActive.x}% ${this.zoneActive.y}%`;
     },
-    imageFondPositionnee () {
-      if (!this.zonePrevention) return '';
-      return [
-        { 'background-image': `url('${this.fondSituation}')` },
-        { 'background-position': `${this.zoneActive.x + this.zoneActive.r}% ${this.zoneActive.y + this.zoneActive.r}%` }
-      ];
-    },
     terminee () {
       return this.zones.every(zone => zone.prevention);
     }
@@ -170,7 +164,13 @@ export default {
 
   methods: {
     transformZone (scale) {
-      return `scale(${scale}) translate(${(POSITION_CERCLE_EVALUATION.x - this.zoneActive.x) / scale}%, ${(POSITION_CERCLE_EVALUATION.y - this.zoneActive.y) / scale}%)`;
+      let transform = '';
+
+      if (this.zonePrevention) {
+        transform = `scale(0.5) translate(0, ${-5 / scale * 2}%)`;
+      }
+
+      return `translate(${(POSITION_CERCLE_EVALUATION.x  -this.zoneActive.x)}%, ${(POSITION_CERCLE_EVALUATION.y - this.zoneActive.y)}%) ${transform}`;
     },
 
     survoleZone (zone) {
@@ -179,6 +179,33 @@ export default {
 
     deSurvoleZone () {
       this.zoneSurvolee = null;
+    },
+
+    styleZone (zone) {
+      let style = [ this.positionX(zone), this.positionY(zone) ];
+      if(this.zoneActive) {
+        style.push({ 'transform-origin': this.zoneActiveTransformOrigin });
+        if(this.zoneEvaluee || this.zonePrevention) {
+          style.push({ 'transform': this.transformZone(2) });
+          style.push(...this.imageFondPositionnee(zone));
+        }
+      }
+      return style;
+    },
+
+    positionX (zone) {
+      return { 'left': `${zone.x - zone.r}%` };
+    },
+
+    positionY (zone) {
+      return { 'top': `${zone.y - zone.r}%` };
+    },
+
+    imageFondPositionnee (zone) {
+      return [
+        { 'background-image': `url('${this.fondSituation}')` },
+        { 'background-position': `${zone.x + zone.r}% ${zone.y + zone.r}%` },
+      ];
     },
 
     evalueZone (zone) {

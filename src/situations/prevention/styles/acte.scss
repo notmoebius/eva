@@ -36,15 +36,24 @@
   transition: transform .3s ease, border .3s ease;
   position: absolute;
   border-radius: 50%;
-  top: 53px;
-  left: calc(50% - 192px);
+  background-size: 470%;
+
+  width: 140px;
+  height: 140px;
+  border: 12px solid $blanc;
+
+  &.agrandie {
+    width: 195px;
+    height: 195px;
+    border: 6px solid $blanc;
+    transform: scale(2);
+  }
 
   &.affichee {
-    width: 384px;
-    height: 384px;
-    border: 24px solid $blanc;
-    transform: scale(0.5) translate(0, -100px);
-    background-size: 470%;
+    width: 195px;
+    height: 195px;
+    border: 12px solid $blanc;
+    transform: scale(1) translate(0, -25px);
   }
 }
 
