@@ -20,11 +20,12 @@
 
 .heure {
   position: absolute;
-  color: $vert-clair;
+  color: $blanc;
   font-size: 64px;
   left: 50%;
   top: 5rem;
   transform: translateX(-50%);
+  text-shadow: 1px 1px 6px $gris;
 }
 
 .icones-conteneur {
@@ -69,6 +70,7 @@
       }
     }
     .label {
+      color: $bleu-fonce;
       margin: 0.3rem 0 0;
       font-size: 12px;
     }
